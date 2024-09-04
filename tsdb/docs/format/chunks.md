@@ -29,15 +29,16 @@ in-file offset (lower 4 bytes) and segment sequence number (upper 4 bytes).
 # Chunk
 
 ```
-┌───────────────┬───────────────────┬──────────────┬────────────────┐
-│ len <uvarint> │ encoding <1 byte> │ data <bytes> │ CRC32 <4 byte> │
-└───────────────┴───────────────────┴──────────────┴────────────────┘
+┌───────────────┬───────────────────┬──────────────┬─────────────────┐
+│ len <uvarint> │ encoding <1 byte> │ data <bytes> │ CRC32C <4 byte> │
+└───────────────┴───────────────────┴──────────────┴─────────────────┘
 ```
 
 Notes:
-* `<uvarint>` has 1 to 10 bytes.
-* `encoding`: Currently either `XOR` or `histogram`.
+* `<uvarint>` has 1 to 10 bytes, from [`encoding/binary`](https://go.dev/src/encoding/binary/varint.go).
+* `encoding`: Currently either `XOR` (0) or `histogram` (1).
 * `data`: See below for each encoding.
+* `CRC32C`: CRC32 Castagnoli of `encoding` and `data`, serialised as an unsigned 32 bits big endian.
 
 ## XOR chunk data
 
